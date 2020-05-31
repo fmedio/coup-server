@@ -19,11 +19,14 @@ public class Game {
         currentPlayer = new AtomicReference<Player>();
     }
 
-
     public void addPlayer(Player player) {
         List<Card> cards = Lists.newArrayList(Card.deal(), Card.deal());
         Hand hand = new Hand(cards, 1);
         players.put(player, hand);
+    }
+
+    public long getId() {
+        return id;
     }
 
     public Hand getHand(Player player) {

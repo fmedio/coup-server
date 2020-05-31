@@ -5,10 +5,8 @@ import com.google.gson.annotations.Expose;
 import java.util.Objects;
 
 public class Player {
-    @Expose(serialize = true, deserialize = true)
     private final long id;
 
-    @Expose(serialize = true, deserialize = true)
     private final String displayName;
 
     public Player(long id, String displayName) {
