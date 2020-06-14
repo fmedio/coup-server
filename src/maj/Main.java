@@ -50,6 +50,29 @@ public class Main {
             return gson.toJson(game);
         });
 
+        get("/games/:id/start", (request, response) -> {
+            response.type("application/json");
+            Game game = board.getGame(Long.parseLong(request.params(":id")));
+            if (game == null) {
+                return "No such game";
+            }
+            game.start();
+            return gson.toJson(game);
+        });
+
+        get("/play/:gameId/:playerId/:actionName", (request, response) -> {
+            response.type("application/json");
+            Game game = board.getGame(Long.parseLong(request.params(":gameId")));
+            if (game == null) {
+                return "No such game";
+            }
+
+            Player player = board.getPlayer(Long.parseLong(request.params(":playerId")));
+            String actionName = request.params("actionName");
+            game.play(player, actionName);
+            return gson.toJson(game);
+        });
+
         get("/addPlayer/:gameId/:playerId", (request, response) -> {
             response.type("application/json");
             Game game = board.getGame(Long.parseLong(request.params(":gameId")));

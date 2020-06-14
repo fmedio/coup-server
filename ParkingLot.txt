@@ -1,1 +1,2 @@
 - Fix json printing for Game
+- Better error display for plays

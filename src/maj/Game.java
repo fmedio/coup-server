@@ -68,5 +68,17 @@ public class Game {
         currentPlayer.set(circularIterator.next());
         return currentPlayer.get();
     }
+
+    public void play(Player player, String action) {
+        if (!state.equals(State.started)) {
+            throw new IllegalStateException("Game hasn't started yet!");
+        }
+
+        if (!currentPlayer.get().equals(player)) {
+            throw new IllegalStateException("It isn't " + player.getDisplayName() + "'s turn yet");
+        }
+
+        nextTurn();
+    }
 }
 

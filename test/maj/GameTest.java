@@ -1,10 +1,16 @@
 package maj;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class GameTest {
+
+    private Game game;
+    private Player panda;
+    private Player lemur;
 
     @Test
     public void testAddPlayer() {
@@ -28,5 +34,30 @@ public class GameTest {
         assertEquals(lemur, game.currentPlayer());
         game.nextTurn();
         assertEquals(panda, game.currentPlayer());
+    }
+
+    @Test
+    public void testPlay() {
+        assertEquals(panda, game.currentPlayer());
+        game.play(panda, "pass");
+        assertEquals(lemur, game.currentPlayer());
+        game.play(lemur, "pass");
+        assertEquals(panda, game.currentPlayer());
+
+        try {
+            game.play(lemur, "pass");
+        } catch (IllegalStateException e) {
+            return;
+        }
+
+        fail("Should have gotten an IllegalStateException - It wasn't lemur's turn!");
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        game = new Game(42);
+        panda = game.addPlayer(new Player(0, "panda"));
+        lemur = game.addPlayer(new Player(1, "lemur"));
+        game.start();
     }
 }
