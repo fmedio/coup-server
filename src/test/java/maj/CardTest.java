@@ -1,15 +1,12 @@
 package maj;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.junit.Test;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import org.junit.Test;
 
 public class CardTest {
     @Test

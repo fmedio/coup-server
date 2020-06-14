@@ -1,12 +1,13 @@
 package maj;
 
-import com.google.common.collect.Lists;
-import org.apache.commons.collections4.IteratorUtils;
-import org.apache.commons.collections4.ResettableIterator;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.apache.commons.collections4.IteratorUtils;
+import org.apache.commons.collections4.ResettableIterator;
+
+import com.google.common.collect.Lists;
 
 public class Game {
     public enum State {
