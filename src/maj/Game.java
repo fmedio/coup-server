@@ -1,36 +1,72 @@
 package maj;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.collections4.IteratorUtils;
+import org.apache.commons.collections4.ResettableIterator;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Game {
+    public enum State {
+        enrollingPlayers,
+        started,
+        finished
+    }
+
     private long id;
-    private LinkedHashMap<Player, Hand> players;
-    private AtomicReference<Player> currentPlayer;
+    private final LinkedHashMap<Player, Hand> playerMap;
+    private ResettableIterator<Player> circularIterator;
+    private final AtomicReference<Player> currentPlayer;
+    private State state;
 
     public Game(long id) {
         this.id = id;
-        players = new LinkedHashMap<Player, Hand>();
-        currentPlayer = new AtomicReference<Player>();
+        playerMap = new LinkedHashMap<Player, Hand>();
+        currentPlayer = new AtomicReference<>();
+        state = State.enrollingPlayers;
     }
 
-    public void addPlayer(Player player) {
+    public Player addPlayer(Player player) {
+        if (! state.equals(State.enrollingPlayers)) {
+            throw new IllegalStateException("Game has started, cannot add players!");
+        }
+
         List<Card> cards = Lists.newArrayList(Card.deal(), Card.deal());
         Hand hand = new Hand(cards, 1);
-        players.put(player, hand);
+        playerMap.put(player, hand);
+        return player;
     }
 
     public long getId() {
         return id;
     }
 
+    public void start() {
+        state = State.started;
+        circularIterator = IteratorUtils.loopingIterator(playerMap.keySet());
+        currentPlayer.set(circularIterator.next());
+    }
+
     public Hand getHand(Player player) {
-        return players.get(player);
+        if (! state.equals(State.started)) {
+            throw new IllegalStateException("Game hasn't started yet!");
+        }
+        return playerMap.get(player);
+    }
+
+    public Player currentPlayer() {
+        if (! state.equals(State.started)) {
+            throw new IllegalStateException("Game hasn't started yet!");
+        }
+
+        return currentPlayer.get();
+    }
+
+    public Player nextTurn() {
+        currentPlayer.set(circularIterator.next());
+        return currentPlayer.get();
     }
 }
 

@@ -8,42 +8,42 @@ import static spark.Spark.get;
 public class Main {
 
     public static void main(String[] args) {
-        final GameController gameController = new GameController();
+        final Board board = new Board();
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         get("/createGame", (request, response) -> {
             response.type("application/json");
-            return gson.toJson(gameController.createGame());
+            return gson.toJson(board.createGame());
         });
 
         get("/createPlayer/:displayName", (request, response) -> {
             response.type("application/json");
             String displayName = request.params(":displayName");
-            Player player = gameController.createPlayer(displayName);
+            Player player = board.createPlayer(displayName);
             return gson.toJson(player);
         });
 
 
         get("/games", (request, response) -> {
             response.type("application/json");
-            return gson.toJson(gameController.gameIds());
+            return gson.toJson(board.gameIds());
         });
 
 
         get("/players", (request, response) -> {
             response.type("application/json");
-            return gson.toJson(gameController.playerIds());
+            return gson.toJson(board.playerIds());
         });
 
         get("/players/:id", (req, res) -> {
             res.type("application/json");
-            Player player = gameController.getPlayer(Long.parseLong(req.params(":id")));
+            Player player = board.getPlayer(Long.parseLong(req.params(":id")));
             return gson.toJson(player);
         });
 
         get("/games/:id", (request, response) -> {
             response.type("application/json");
-            Game game = gameController.getGame(Long.parseLong(request.params(":id")));
+            Game game = board.getGame(Long.parseLong(request.params(":id")));
             if (game == null) {
                 return "No such game";
             }
@@ -52,8 +52,8 @@ public class Main {
 
         get("/addPlayer/:gameId/:playerId", (request, response) -> {
             response.type("application/json");
-            Game game = gameController.getGame(Long.parseLong(request.params(":gameId")));
-            Player player = gameController.getPlayer(Long.parseLong(request.params(":playerId")));
+            Game game = board.getGame(Long.parseLong(request.params(":gameId")));
+            Player player = board.getPlayer(Long.parseLong(request.params(":playerId")));
             game.addPlayer(player);
             return gson.toJson(game);
         });

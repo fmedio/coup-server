@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class GameController {
+public class Board {
     private final Map<Long, Game> games;
     private final AtomicLong maxGameId;
 
     private final Map<Long, Player> players;
     private final AtomicLong maxPlayerId;
 
-    public GameController() {
+    public Board() {
         games = new HashMap<Long, Game>();
         maxGameId = new AtomicLong(0);
         players = new HashMap<Long, Player>();
