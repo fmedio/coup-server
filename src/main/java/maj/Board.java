@@ -2,7 +2,6 @@ package maj;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -30,12 +29,12 @@ public class Board {
         return games.get(id);
     }
 
-    public Collection<Long> gameIds() {
-        return games.keySet();
+    public Collection<Game> games() {
+        return games.values();
     }
 
-    public Collection<Long> playerIds() {
-        return players.keySet();
+    public Collection<Player> players() {
+        return players.values();
     }
 
     public Player createPlayer(String displayName) {

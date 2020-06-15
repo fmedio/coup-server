@@ -1,17 +1,17 @@
 package maj;
 
-import java.util.List;
+import java.util.Collection;
 
 public class Hand {
-    private List<Card> cards;
+    private Collection<Card> cards;
     private int coins;
 
-    public Hand(List<Card> cards, int coins) {
+    public Hand(Collection<Card> cards, int coins) {
         this.cards = cards;
         this.coins = coins;
     }
 
-    public List<Card> getCards() {
+    public Collection<Card> getCards() {
         return cards;
     }
 
