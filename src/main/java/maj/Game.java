@@ -44,6 +44,18 @@ public class Game {
         return id;
     }
 
+    public LinkedHashMap<Player, Hand> getPlayerMap() {
+        return playerMap;
+    }
+
+    public AtomicReference<Player> getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public State getState() {
+        return state;
+    }
+
     public void start() {
         state = State.started;
         circularIterator = IteratorUtils.loopingIterator(playerMap.keySet());
@@ -51,7 +63,7 @@ public class Game {
     }
 
     public Hand getHand(Player player) {
-        if (! state.equals(State.started)) {
+        if (!state.equals(State.started)) {
             throw new IllegalStateException("Game hasn't started yet!");
         }
         return playerMap.get(player);
