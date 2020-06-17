@@ -3,6 +3,7 @@ package maj;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Board {
@@ -25,8 +26,8 @@ public class Board {
         return game;
     }
 
-    public Game getGame(long id) {
-        return games.get(id);
+    public Optional<Game> getGame(long id) {
+        return Optional.ofNullable(games.get(id));
     }
 
     public Collection<Game> games() {
@@ -43,7 +44,7 @@ public class Board {
         return player;
     }
 
-    public Player getPlayer(long id) {
-        return players.get(id);
+    public Optional<Player> getPlayer(long id) {
+        return Optional.ofNullable(players.get(id));
     }
 }

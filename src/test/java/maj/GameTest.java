@@ -1,10 +1,9 @@
 package maj;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class GameTest {
 
@@ -28,21 +27,22 @@ public class GameTest {
         Game game = new Game(42);
         Player panda = game.addPlayer(new Player(0, "panda"));
         Player lemur = game.addPlayer(new Player(1, "lemur"));
+        assertFalse(game.getCurrentPlayer().isPresent());
         game.start();
-        assertEquals(panda, game.currentPlayer());
+        assertEquals(panda, game.getCurrentPlayer().get());
         game.nextTurn();
-        assertEquals(lemur, game.currentPlayer());
+        assertEquals(lemur, game.getCurrentPlayer().get());
         game.nextTurn();
-        assertEquals(panda, game.currentPlayer());
+        assertEquals(panda, game.getCurrentPlayer().get());
     }
 
     @Test
     public void testPlay() {
-        assertEquals(panda, game.currentPlayer());
+        assertEquals(panda, game.getCurrentPlayer().get());
         game.play(panda, "pass");
-        assertEquals(lemur, game.currentPlayer());
+        assertEquals(lemur, game.getCurrentPlayer().get());
         game.play(lemur, "pass");
-        assertEquals(panda, game.currentPlayer());
+        assertEquals(panda, game.getCurrentPlayer().get());
 
         try {
             game.play(lemur, "pass");

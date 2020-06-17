@@ -1,21 +1,13 @@
 package maj;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Path("/")
@@ -79,7 +71,7 @@ public class RestEndpoint {
     @Path("/games/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response startGame(@PathParam("id") Long id) {
-        return Optional.ofNullable(board.getGame(id))
+        return board.getGame(id)
                 .map(game -> {
                     if (game.getPlayerMap().size() == 0) {
                         return Response.status(Status.BAD_REQUEST).entity("\"This game has no players\"").build();
@@ -93,40 +85,25 @@ public class RestEndpoint {
     @PUT
     @Path("/games/{gameId}/{playerId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addPlayerToGame(@PathParam("gameId") Long gameId, @PathParam("playerId") Long id) {
-        Game game = board.createGame();
-        return Response.status(Status.CREATED).entity(game).build();
+    public Response addPlayerToGame(@PathParam("gameId") Long gameId, @PathParam("playerId") Long playerId) {
+        return board.getGame(gameId)
+                .flatMap(game -> board.getPlayer(playerId)
+                        .map(player -> game.addPlayer(player))
+                        .map(player -> Response.status(Status.OK).build()))
+                .orElse(Response.status(Status.NOT_FOUND).build());
     }
 
-//
-//        get("/games/:id/start", (request, response) -> {
-//            response.type("application/json");
-//            Game game = board.getGame(Long.parseLong(request.params(":id")));
-//            if (game == null) {
-//                return "No such game";
-//            }
-//            game.start();
-//            return gson.toJson(game);
-//        });
-//
-//        get("/play/:gameId/:playerId/:actionName", (request, response) -> {
-//            response.type("application/json");
-//            Game game = board.getGame(Long.parseLong(request.params(":gameId")));
-//            if (game == null) {
-//                return "No such game";
-//            }
-//
-//            Player player = board.getPlayer(Long.parseLong(request.params(":playerId")));
-//            String actionName = request.params("actionName");
-//            game.play(player, actionName);
-//            return gson.toJson(game);
-//        });
-//
-//        get("/addPlayer/:gameId/:playerId", (request, response) -> {
-//            response.type("application/json");
-//            Game game = board.getGame(Long.parseLong(request.params(":gameId")));
-//            Player player = board.getPlayer(Long.parseLong(request.params(":playerId")));
-//            game.addPlayer(player);
-//            return gson.toJson(game);
-//        });
+    @PUT
+    @Path("/games/{gameId}/{playerId}/{actionName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response play(@PathParam("gameId") Long gameId,
+                         @PathParam("playerId") Long playerId,
+                         @PathParam("actionName") String actionName) {
+
+        return board.getGame(gameId)
+                .flatMap(game -> board.getPlayer(playerId)
+                        .map(player -> game.play(player, actionName))
+                        .map(player -> Response.status(Status.OK).entity(game).build()))
+                .orElse(Response.status(Status.NOT_FOUND).build());
+    }
 }
