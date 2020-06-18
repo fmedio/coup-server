@@ -55,7 +55,7 @@ public class Main extends ResourceConfig {
     public void start(int port) throws Exception {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        context.setResourceBase("static");
+        context.setResourceBase("resources");
 
         Server jettyServer = new Server(port);
         jettyServer.setHandler(context);
